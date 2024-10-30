@@ -6,44 +6,17 @@ import socket
 import time
 import struct
 import argparse
-import logging
-import colorlog
+
+from color_logger import create_color_logger
 
 class Control:
     def __init__(self,host_ip, port):
         self.host_ip=host_ip
         self.port=port
-        self.define_color_logger()
+        self.logger = create_color_logger(__name__)
         self.connect_to_server()
         self.setup_adafruit_device()
 
-    def define_color_logger(self):
-        # Create a logger
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.DEBUG)
-
-        # Create a colorized formatter
-        formatter = colorlog.ColoredFormatter(
-            "%(log_color)s%(levelname)-8s%(reset)s %(blue)s%(message)s",
-            datefmt=None,
-            reset=True,
-            log_colors={
-                'DEBUG': 'cyan',
-                'INFO': 'green',
-                'WARNING': 'yellow',
-                'ERROR': 'red',
-                'CRITICAL': 'red,bg_white',
-            },
-            secondary_log_colors={},
-            style='%'
-        )
-
-        # Create a console handler and set the formatter
-        ch = logging.StreamHandler()
-        ch.setFormatter(formatter)
-
-        # Add the console handler to the logger
-        self.logger.addHandler(ch)
 
     def connect_to_server(self):
         """
